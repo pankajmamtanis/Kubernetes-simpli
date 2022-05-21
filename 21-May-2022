@@ -57,8 +57,15 @@ docker is written in GoLang
 docker ce - communiry edition - free
 dockker ee - enterprise edition - purchased version - merantis
 
+_____________________________________________________________________________
 
+containers vs virtualisation 
 
+https://www.baeldung.com/cs/virtualization-vs-containerization#:~:text=Virtualization%20and%20containerization%20are%20the,the%20concept%20of%20a%20container.
+full OS vs minimal OS (OSLIB)
+fat vs fit 
+kernel vs no-kernel (command line missing grep yum etc)
+size of image
 
 
 
