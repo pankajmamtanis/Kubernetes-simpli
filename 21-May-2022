@@ -49,3 +49,17 @@ image vs container
 - docker image is like template/blueprint from which we can run multiple containers
 
 _________________________________________________________________________________
+
+docker is a tool / software first released in 2013
+
+docker is written in GoLang
+
+docker ce - communiry edition - free
+dockker ee - enterprise edition - purchased version - merantis
+
+
+
+
+
+
+
