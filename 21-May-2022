@@ -1,14 +1,51 @@
 Server - Use to host/run a software / applications - request & response
 software/application:piece of code
-
+_________________________________________________________________________________________________________________
 Standalone apps: desktop applications - MS-paint/notepad/calc/ms-office
 A standalone application is an application that runs locally on the device and doesn't require anything else to be functional. All the logic is built into the app, so it doesn't need an internet connection nor any other services installed.
 
 Web application: an app that can be accessed on a network (in a browser) - facebook
 In computer system, a web application is a client-side and server-side software application in which the client runs or request in a web browser. Common web applications include email, online retail sales, online auctions, wikis, instant messaging services and more.
-
+_________________________________________________________________________________________________________________
 Web-server
 A web server is software and hardware that uses HTTP (Hypertext Transfer Protocol) and other protocols to respond to client requests made over the World Wide Web. The main job of a web server is to display website content through storing, processing and delivering webpages to users. Besides HTTP, web servers also support SMTP (Simple Mail Transfer Protocol) and FTP (File Transfer Protocol), used for email, file transfer and storage.
 EX-nginx/apache/tomcat
 
 Run-time environment - websphere/weblogic/jboss
+_________________________________________________________________________________________________________________
+types of Servers - physical and VM
+
+we have below issues to be addressed
+____________________________________
+maintaining physical servers in DC is expensive
+resource wastage is there with physical or manage yourself case
+maintenance is very high
+scalability
+______________________________________
+using virtualisation saves a lot of resources using hardware virtualisation
+_________________________________________________________________________
+
+environment - single/group of servers (physical/virtual) where we run our software
+
+Dev - (tomcat java) -war file deployed
+
+QA - (tomcat java) -war file deployed
+
+PROD - (tomcat java) -war file deployed
+
+same war working in Dev might not work in prod due to environment different, could be reason for same code to fail in production
+______________________________________________________________________________
+
+how to build and run containers?
+
+- we need containerization tool/software - docker/crio/containerd/lxc/rocket
+
+image vs container 
+- docker image is just software package that sits on your disk doing nothing
+- 
+- run time instance of an image is called container
+- container is just a process that runs on your server (physical/virtual) and consume the resources like cpu & ram to process a request
+
+- docker image is like template/blueprint from which we can run multiple containers
+
+_________________________________________________________________________________
