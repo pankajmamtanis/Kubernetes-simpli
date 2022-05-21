@@ -66,7 +66,182 @@ full OS vs minimal OS (OSLIB)
 fat vs fit 
 kernel vs no-kernel (command line missing grep yum etc)
 size of image
+____________________________________________________________________________________________
 
+foreground vs background process- The foreground contains the applications the user is working on, and the background contains the applications that are behind the scenes, such as certain operating system functions, printing a document or accessing the network.
+
+container running in detach mode - background process
+container running in attach mode - foreground process
+
+_______________________________________________________________________________________
+
+docker pull docker.io/library/tomcat:latest
+docker pull nginx
+docker image ls
+
+docker run -d centos // does not keep running as there is no process, it will exit. body will run only if heart is beating likewise process has to be running
+
+docker inspect <>  // command running inside every container can be checked
+
+root@ip-172-31-59-162:~# docker ps -a
+CONTAINER ID   IMAGE     COMMAND                  CREATED         STATUS                     PORTS     NAMES
+9db4718e35a7   centos    "/bin/bash"              4 minutes ago   Exited (0) 4 minutes ago             nervous_haibt (bin/bash runs and exits)
+aa6df4e4ff74   nginx     "/docker-entrypoint.…"   5 minutes ago   Up 5 minutes               80/tcp    focused_pike
+root@ip-172-31-59-162:~# 
+_________________________________________________________________________________________
+root@ip-172-31-59-162:~# docker run -d centos sleep 190
+0ec7044c02d9702ba1293bc9dc2294d6927d4bfa69347358b3a7f75688c96ff2
+root@ip-172-31-59-162:~# docker ps
+CONTAINER ID   IMAGE     COMMAND                  CREATED         STATUS         PORTS     NAMES
+0ec7044c02d9   centos    "sleep 190"              3 seconds ago   Up 2 seconds             stoic_cohen >>>>>>>>>>>>>>>> container is running till sleep is running
+aa6df4e4ff74   nginx     "/docker-entrypoint.…"   6 minutes ago   Up 6 minutes   80/tcp    focused_pike
+root@ip-172-31-59-162:~# 
+
+________________________________________
+
+every container has its own network // different iP address and ports
+curl =<containerIP>:port
+
+root@ip-172-31-59-162:~# curl 172.17.0.2:80>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+html { color-scheme: light dark; }
+body { width: 35em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+root@ip-172-31-59-162:~# 
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.
+from the host machine
+root@ip-172-31-59-162:~# curl localhost:49153
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+html { color-scheme: light dark; }
+body { width: 35em; margin: 0 auto;
+font-family: Tahoma, Verdana, Arial, sans-serif; }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+root@ip-172-31-59-162:~# 
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+docker port mapping with container to access docker from host machine
+docker run -d -P nginx
+
+docker run -d -P lerndevops/samples:mywebsite-v1
+
+docker ps
+hostname -i
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.
+   38  docker run -d -P lerndevops/samplesmywebsite-v1
+   39  curl 72.17.0.2:49153
+   40  curl 172.17.0.2:49153
+   41  curl 172.17.0.2:80
+   42  curl localhost:49153
+   43  docker run -d -P lerndevops/samplesmywebsite-v1
+   44  docker run -d -P lerndevops/samples:mywebsite-v1
+   45  docker ps
+   46  docker inspect 89ffb64e9fc7
+   47  curl 172.17.0.4:80
+   48  docker ps
+   49  curl 172.31.59.162:49154
+   
+   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+   capital P is dynamic port numbering -- since port numbers change therefore mapping it again and again would be difficult for request routing (container to host)
+   therefore we need container orchestrator
+   
+   K8 helps us run multiple container from multiple imagesinto multiple servers/VM..
+   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.
+   
+   master/manager (controls, deploys, ) -1 <<docker service create replicas 100 nginx
+   
+   worker/team - 2 or more
+   >>>>>>>>>>>>>>>>>>>
+   K8 needs one container tool to be installed - docker / crio/containerd/rocket
+   K8 software needs to be installed on the Master -KUBEADM / KUBELET
+   
+   above 3 are needed on worker nodes too - docker / kubeadm /kubelet
+   
+   ----KUBEADM 
+   - is a tool to init the kube master process / node
+   - is a tool helps join the worker to master
+   
+   (kubeadm init on master {initialises master process on Master}          --- kubeadmn join on worker)
+   
+   application node communicating with DB node communicating each service is communicating with each other.
+   
+   
+   ------KUBELET
+   - is an agent process that runs on every node
+   - it is responsible for master and worker communication
+   - kubelet process starts autoMATICALLY when we run kubeadm join on worker process
+   
+   ---KUBECTL get nodes ( docker ps)
+   -- kubectl create
+   -- kubectl describe
+   -- kubectl delete
+   -- kubectl apply
+   
+   MASTER has API process which will communicate with Worker nodes.
+   kubelet not needed on Master, if at all you need to run worker node on Master too.
+   
+   Kubernetes
+   - Autoscaling yes, but docker no
+   - RBAC - we can do a create read update delete seperately as needed, Docker swarn does not have( can have in purchased version)
+   - SSL communication within the cluster, docker swarm does not give this for free (can be purchased)
+   
+   
+   Docker network
+   - by default its a bridge network for all to comm with all
+   - docker init gets in overlay network
+   
+   Kubernetes 
+   - by default there is no networking drivers configured in kube cluster for container communication
+   - we must install networking driver as part of the cluster setup
+     - calico/ canal / flannel / weave etc. 
+   
+   
+   
+   >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+   
+   
+   
+   
 
 
 
