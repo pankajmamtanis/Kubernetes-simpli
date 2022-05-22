@@ -338,12 +338,87 @@ _____________
 Kube-Proxy (fwds node to container & port forwarding and publishing - intermediary)
 - helps to publish port for containers & updates the required routing config to route the requests to the container from the host
 
+WORKER = NODE
+________________________
 
+big deployment we cant use command line
 
+abc.yaml/yml - yaml aint markup lang -- data serialisation lang
 
+there is one basic rule we need to follow while writing yaml - indentation
+_________________________
 
+===============================================
+follow 3 data structures in YAML
 
+--------scalar
+name: naresh
+a: 5
+b : 56.6
+ab: true
 
+----- dictionary / map 
+laptop:
+  ram: 16gb
+  cpu: 8 core
+  disk: 1 tb
+  model: apple
+  
+-------list/array
+- bmw
+- audi
+- RR
+===============================================
+
+cars:
+  - bmw
+      color: red
+      model: sedan
+      engine: 2l
+  - audi
+      color: blue
+      model: xuv
+      enginer:3.5l
+  - RR:
+      color:
+         - blue
+         - white
+         - red
+       model:
+        - phantom
+        - ghost
+       engine:
+        - 3L
+        - 5L
+        - 6L
+        
+        
+  ++++++++++++++++++++++++++++++++++++
+  
+  Keys are pre-defined by the technology (K8s - manifest, docker - compose, ansible - compose)
+  
+      
+  ----
+  kubectl run podx --image-nginx
+  -----
+  in yaml
+  
+  kind: POD #### / Daemonset/Namespace/    # kubectl api-resources (all what is shown in this can be used in this as Kind)
+  apiVersion : v1
+  metadata: 
+    name: podx
+    namespace:teama ## if we dont define then detault
+  spec:
+     container:
+      - name: cont1
+        image: tomcat
+      - name: cont1
+        image: nginx
+      
+ ___________________
+ 
+ 
+      
 
 
 
