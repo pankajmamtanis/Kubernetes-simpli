@@ -252,6 +252,100 @@ Worker1 ------ kubeadm reset --force , then with join command
 Worker1 ------ kubeadm reset --force , then with join command
 
 
+for the lock
+ps -ef |grep apt
+/var/lib/dpkg/ then
+rm -rf lock frontend lock
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>
+POD LIFE CYCLE
+>>>>>>>>>>>>>>
+kubectl run webapp --image=docker.io/lerndevops/samples:mywebsite-v1
+pod/webapp created
+
+root@ip-172-31-15-152:~# kubectl get pods -o wide
+NAME     READY   STATUS              RESTARTS   AGE   IP       NODE              NOMINATED NODE   READINESS GATES
+webapp   0/1     ContainerCreating   0          38s   <none>   ip-172-31-8-114   <none>           <none>
+root@ip-172-31-15-152:~# 
+
+root@ip-172-31-15-152:~# kubectl run nginxpod --image=nginx:latest
+pod/nginxpod created
+root@ip-172-31-15-152:~# kubectl get pods -o wide
+NAME       READY   STATUS              RESTARTS   AGE    IP       NODE              NOMINATED NODE   READINESS GATES
+nginxpod   0/1     ContainerCreating   0          4s     <none>   ip-172-31-3-210   <none>           <none>
+webapp     0/1     ContainerCreating   0          113s   <none>   ip-172-31-8-114   <none>           <none>
+root@ip-172-31-15-152:~# 
+
+curl <IP of POD>:port ##to open the app
+
+kubectl describe nginxpod
+
+kubectl exec -it nginx -- /bin/bash
+
+service nginx status // from inside of bin/bash
+
+kubectl delete pod nginxpod
+--------------------------------------------------------------------
+
+ok. so each pod can have same image containers, only the number can be 1 or more. correct?
+
+pods can have multple containers - of nginx container 1 or more 
+
+
+
+__________________________________________________________________
+Kubernetes PODS
+-------------
+Pods are the smalles deployable units of computing that you can create and manage in k8s
+
+______________________________________________________________________
+kubectl get pods -o wide --all-namespsaces
+
+Namespaces
+In Kubernetes, namespaces provides a mechanism for isolating groups of resources within a single cluster. Names of resources need to be unique within a namespace, but not across namespaces.
+_____________________________________________________________________
+
+Kubernetes Architecture
+
+Master (can also have worker node in this)
+- API Server <Master process -- Team manager finds out who can work on the request basis b/w>  (info request (kubectl get nodes) ---> goes to API server to get details and returns
+- ETCD (cluster store) - DB (key value store, nodes available, status of nodes, node config, no. of processes, OS, container runtime running, how long pod is running, all cluster data)
+- Scheduler (identify worker node which is free)
+- controller manager
+
+Worker (below gets added only post join command)
+- kubelet (receives request from APPI server, --asks contianer to pull image -- interacts with netw
+- container runtime runtime (dcker) (pulls images from docker)
+- kube proxy
+- networking driver (weave)
+
+
+>>>>> use cases
+kubectl get nodes (info request (kubectl get nodes) ---> goes to API server to get details and returns
+
+kubectl run pod1 - image = nginx 
+kubectl- API server - Scheduler - API Server - kubelet - docker & weave - kubelet - api server - ETCD
+
+mult-master mode cluster should be there in production, 
+________________________________________________
+
+Controller manager
+- is responsible for desired state
+- what we request is called desired (make sure actual state reaches desired state)
+- auto healing and auto-scaling
+
+_____________
+Kube-Proxy (fwds node to container & port forwarding and publishing - intermediary)
+- helps to publish port for containers & updates the required routing config to route the requests to the container from the host
+
+
+
+
+
+
+
+
+
 
 
 
