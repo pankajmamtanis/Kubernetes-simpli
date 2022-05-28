@@ -421,16 +421,213 @@ cars:
             containerPort: 8080
           - name https
             containerPort: 8443
-      - name: cont1
+      - name: cont2
         image: nginx
       
  ___________________
  
- 
+  apiVersion : v1
+  metadata: 
+    name: multi-cont-pod
+    namespace:teama ## if we dont define then detault
+    label:     ##label is mandatory, if we do not define a label kube will assign one by default
+      team: sysadmin # here both key and value is your choice
+      teams1: systemadm1 ## label2 and value2
+  spec:
+    restartPolicy: Always # in case of any issue with container it will restart do # Never # will not restart it
+     container:    ## app container array
+      - name: cont1
+        image: tomcat:label
+        ports:
+          - name: http
+            containerPort: 8080
+      - name: cont2
+        image: nginx:latest
+        ports:
+          - name: http
+            containerPort: 80
+      - name: cont3
+        image: ubuntu:latest
+        ports:
+          - name: http
+            containerPort: 80
+            
+        
       
+ ___________________
+ 
+    kubectl describe pod <multi-pod> ## dettailed logs
+    kubectl logs weapp ## gets logs for container
+    
+    kubecctl logs multi-cont-pod-2 -cont3 ## gets cont3 logs
+    kubecctl logs multi-cont-pod-2 -cont3
+    
+kubectl exec -it multi-cont-pod2 -c cont1 --bin/bash ## get into container-1
+kubectl exec -it multi-cont-pod2 -c cont2 --bin/bash ## get into container-2 # check service nginx status
+
+get into container while single IP is given to POD
+curt 10:44.0.4:80 # for nginx access on different port for each container inside POD
+curt 10:44.0.4:8080 # for nginx access on different port for each container inside POD
+___________
+these are cases where a different namespace is mentioned in the yaml while creating it, then we will have to mentiond the earlier mentioned namespace
+
+kubectl --namespace default exec -it multi-cont-pod2 -c cont1 --/bin/bash ## 
+
+________-----------------------------
+
+Init Containers - 
 
 
 
+  apiVersion : v1
+  metadata: 
+    name: multi-cont-pod
+    namespace:teama ## if we dont define then detault
+    label:     ##label is mandatory, if we do not define a label kube will assign one by default
+      team: sysadmin # here both key and value is your choice
+      teams1: systemadm1 ## label2 and value2
+  spec:
+    restartPolicy: Always # in case of any issue with container it will restart do # Never # will not restart it
+    initContainers           ## run run to completion, does not complete by itself, to check if process exited with code 0=good <> 0 bad. check this with #echo$?
+       #sleep 5
+       #echo $?
+       #0
+       #Sleep 4
+       #echo $?
+       #1
+       
+       #previous one should complete successfully before we execute the next one
+       # Use case - check if DB is up or not before we spin the containers. check by doing telnet to DB.
+       # Init container will runs dependency only once, if any of the prod container crashes, there is nothing it will do with init.
+       # we can put any sequencing for init containers, it will always get executed first. 
+       - 
+    container:    ## app container array
+      - name: cont1
+        image: tomcat:label
+        ports:
+          - name: http
+            containerPort: 8080
+      - name: cont2
+        image: nginx:latest
+        ports:
+          - name: http
+            containerPort: 80
+      - name: cont3
+        image: ubuntu:latest
+        ports:
+          - name: http
+            containerPort: 80
+ _____________________________________________________________
+        
+      
+ Single instance of Pod = Single Instance of Application
+ 
+ Roles =
+ Scheduler - where pod needs to be created
+ API server - delegates the request to kubelet
+ kubelet - creates the pod
+
+________________________________________________________
+
+Static pod
+- aside to the automated pods created using yaml file we have to go to the pod and create the 
+
+any .yml file seen in etc/kubernetesmanifest directory
+we dont even need to apply the yml, it will pick in next 5 secs and start createing the pod.
+
+pod created apends node name - podx-worker01 ##
+
+___________________________________________________________
+
+kubectl get pods -n kube-system -o wide
+
+we cant delete a static pod.. if we delete...yaml file will create it again. the only way to remove is to remove the yaml file.
+
+----
+
+source code based deployments - we can plan a migration path to kubeadmn based cluster.
+---
+
+What are controllers in Kubernetes?
+In Kubernetes, controllers are control loops that watch the state of your cluster, then make or request changes where needed. Each controller tries to move the current cluster state closer to the desired state
+
+controlling a group of PODS
+
+Types-
+1) ReplicaSetup (Replication Controller)
+2) DaemonSet
+3) Deployment
+4) Job
+5) CronJob
+6) Stateful
+-----------
+
+1) ReplicaSetup (Replication Controller)
+____==================================================================================================
+apiVersion: apps/v1<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+kind: ReplicaSet <<<<<<<<<<<<<<<<<<<<<<<<<
+metadata:
+  name: frontend
+  namespace: default
+  labels:
+    app: guestbook
+    tier: frontend
+spec:
+  # modify replicas according to your case
+  replicas: 3<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<3 replicas<<if we dont mention anything then creates 1 replica and maintains it.
+  selector:
+    matchLabels: <<<<<<<<<<<<<<<<<<<kubectl check the label<<<look for the pods in the cluster matching the label before creating
+      run: nginxpod
+  template:
+    metadata:
+      #name is not done kubernetes will generate the name
+      labels:
+        run: nginxpod #### if 4 pods are needed , I found above then we can create next 3 here with this.
+    spec:
+      containers:
+      - name: php-redis
+        image: gcr.io/google_samples/gb-frontend:v3
+____==================================================================================================
+so per understanding it will match if pod is available matching the label then it will get adopted for use, rest shortfall will create pods as mentioned in the replicas
+
+2) DaemonSetAPI
+
+https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
+
+- Monitoring agent
+- OCS
+- Antivirus
+
+daemonset - default setup is kube-proxy, AV, etc. multiple will lead to conflict.
+
+3) Deployment
+
+https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+
+how to access application POD-ID:port, but it can only access one POD, but not accessible outside.
+
+for accessing multi-pod app deployment - 
+
+
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++
+Service
+- clusterIP
+load balancer
+
+
+Spec:
+ type: Clsuter IP: its acts as a internal virtual load balancer that can forward a request int a singgle/group of pods
+ selector:
+  app: mywebsite
+ports: 
+  app: mywebsite
+  ports: 80
+  ports
+  
+  ______________________________________________________________
+  
 
 
 
