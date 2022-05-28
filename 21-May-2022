@@ -401,6 +401,7 @@ cars:
   ----
   kubectl run podx --image-nginx
   -----
+  kubectl run podx --image-nginx --namespace=teama -l team=sysadmin
   in yaml
   
   kind: POD #### / Daemonset/Namespace/    # kubectl api-resources (all what is shown in this can be used in this as Kind)
@@ -408,10 +409,18 @@ cars:
   metadata: 
     name: podx
     namespace:teama ## if we dont define then detault
+    label:     ##label is mandatory, if we do not define a label kube will assign one by default
+      team: sysadmin # here both key and value is your choice
+      teams1: systemadm1 ## label2 and value2
   spec:
      container:
       - name: cont1
-        image: tomcat
+        image: tomcat:label
+        ports:
+          - name: http
+            containerPort: 8080
+          - name https
+            containerPort: 8443
       - name: cont1
         image: nginx
       
