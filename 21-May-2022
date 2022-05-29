@@ -664,6 +664,57 @@ spec:
  GKE setup shown for creating a GKE standard cluster...
  
  ---------
+ FLOW DIAGRAM--
+endpoint URL (DNS) -- External LB -- nodeIP: nodeport (any one node in the cluster ) -- clusterIP:Port --PodIP:ContainerPort (any one of the POD)
+
+
+-------
+deployement vs replicaset
+
+deployment = replicaset + rolling update/rollback (it creates new pod with latest update and deletes old one, while maitaining the uptime as well)
+
+Bring down the website & update the latest version.
+
+no Downtime deployment
+
+Deployment is an abstraction layer over replicaset.
+example - 
+https://github.com/lerndevops/educka/blob/master/3-controllers/deployments/deployment-ex3.yml 
+
+parameters
+-------------------------
+- maxsurge - no. of pods - max no of new pods which can be added. = 2 .... v1(9) + v2(3) = 12
+--------------------------
+- minimum ready seconds - wait for 45 secs post V2 comes up from V1
+--------------------------
+- maxunavailable - 1
+kubectl get deployment
+AVAILAbLE=10 + 2 (aligns to this value as per above parameter) .. out of 12 minimum 11 should be avialble for us to continue otherwise deployment is halted.
+
+v1(10) + v2(2) = 12
+minreadySeconds=45
+maxUnavailable : 1
+
+v1(9) + v2(3) = 12
+minreadySeconds=45
+maxUnavailable : 1
+
+v1(0) + v2(12) = 12
+minreadySeconds=45
+maxUnavailable : 1
+
+---------------------------
+deployment UNDO....
+Revision
+v1
+v2 - <delete>
+v3  - undo - kube will roll one step back in the revision history (delete)
+v2 - <active> -(if we do undo again then this goes back to v3)
+v3 - (active) ------v1-v2-v3
+
+kubectl rollout undo deployment kubeservice --to-revision 1  ## with this we can do directly to a desired version outpout from kubectl rollout history deployment kubeserve
+kubectl rollout history deployment kubeserve
+
 
 
 
