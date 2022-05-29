@@ -715,7 +715,39 @@ v3 - (active) ------v1-v2-v3
 kubectl rollout undo deployment kubeservice --to-revision 1  ## with this we can do directly to a desired version outpout from kubectl rollout history deployment kubeserve
 kubectl rollout history deployment kubeserve
 
+----------
 
+how many versions can be stored
 
+revisionHistoryLimit: 10 # default 10, and can be configured no limit.
+-------------------
+Restricting the resources that a container can take CPU/RAM etc. Resource limit.
+specs
+  containers:
+     - name :cont1
+       image:nginx
+     
+     env:
+      - name: JAVA_HOME
+        value: /usr/in/java
+      - name: DB_HOST
+        value: "1.2.3.4"
+       - name: DB_PORT
+        value: "200"
+      resources
+        requests: ## min amount of resources (cpu/ram) guranteed for the cont from the host/worker where it run
+         cpu: 20m  #1 core cpu on your server = 1000 milli cpus = 20m = 2% of 1 cpu core
+         memory: 128M
+        limits: ## max amount of resources (cpu/ram) a cont can take the host/worker where it run
+          cpu: 40m
+          memory: 256M
+    
+
+----------------------------------------
+deploy this application..
+
+https://raw.githubusercontent.com/lerndevops/microservices-demo/master/deploy/kubernetes/complete-demo.yaml
+
+https://github.com/pankajmamtanis/microservices-demo/blob/master/internal-docs/design.md
 
 
