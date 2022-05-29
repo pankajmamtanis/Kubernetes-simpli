@@ -629,6 +629,41 @@ ports:
   ______________________________________________________________
   
 
+myshop.com --> External LB >> cluster IP > Pod IP > container
+means iptables will be updated based on the configuration what we did for the pods/containers automatically
+
+okay means iptables service always be up and running , Thanks
+
+-------
+
+spec:
+ type: LoadBalancer  (creates external and internal LB), if it has a handle of cloud providers like AWS Azure, then external can be made.
+ 
+ -----
+ 
+ diff way of creating kube cluster
+ self managed / on prem cluster
+ 
+ cloud managed cluster on cloud
+ - PAAS (Platform as a service)
+ 
+ EKS - AWS - elastic kubernetes service
+ AKS - Azure - Azure Kubernetes service
+ Google - GKE - Google kubernetes service
+ --------
+ 
+ container orchestration cluster
+ 
+ Master - in case clound managed cluster, all the master instaces are managed by cloud only. we will never have access to login to mater
+ Worker - you will be reponsible for managing worker nodes  -- GKE standard (we will manage)
+            - multi-master is done automatically
+            - 
+            
+        -  you can leave the worker node management to the cloud service provier (GKE AUTO-pilot)
+ 
+ GKE setup shown for creating a GKE standard cluster...
+ 
+ ---------
 
 
 
