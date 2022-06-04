@@ -16,3 +16,46 @@ minute(0-59) Hours(0-23) DayoftheMonth(1-31) Month(1-12) DayofTheWeek(0-7) (0&7-
 20-30        1-14      2-20                  3-5         3-4                      Range
 *            *         *                     *           *                        every-minute.sh
 
+stateful - 
+
+
+
+
+
+
+-------------------------------
+
+Volumes
+- pod-container-tomcat-logs,data will be stored inside the cotainer by default. Banking example we cannot use such setup.
+- data needs to be persistent
+types of volumes
+-------
+1- emptyDirectory - emptyDir are volumes that get created empty when a Pod is created. While a Pod is running its emptyDir exists. If a container in a Pod crashes the emptyDir content is unaffected. Deleting a Pod deletes all its emptyDirs.
+   - used for sharing the data between 2 containers within a Pod, single container used outside the container
+   - is a non-persistent volume
+   - gets created by k8s when pod is created
+   - all data within would get deleted once we delete the pod
+   - like pendrive connected to laptop for moving data, similarly emptyDir connected to container
+   kubectl get pod <name-of-the-pod> -o yaml
+   ------
+2- Persistent Vol
+  - hostpath - worker1 can only write and read on hostpath and only respective owner can.
+  - Persistent volume claim - hotel room book and later claim example.
+  /NFS/EBS/Azurefiles
+  - PV - PVC - Deployment example - supproted - https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+  ----------------------
+  
+  Storage Class - we dont do PV, we just give a reference to GCP for creating storage there and then
+ --------------------
+  Dynamic Volume provisioning - then we dont provision Persisent volume, to avoid billing - charging.
+  ---------------------
+  Home work. https://github.com/lerndevops/educka/tree/master/5-storage/storageclass/nfs 
+  ------------------------
+  ConfigMap - A ConfigMap is an API object used to store non-confidential data in key-value pairs. Pods can consume ConfigMaps as environment variables
+  - environment specific config cannot be shipped with container, it has to go with configmap.
+  - from file
+  - from environment variables
+  ---------------
+  
+  Secret - same as config map just that this keeps user/passwords. use base64 for encryption
+  
