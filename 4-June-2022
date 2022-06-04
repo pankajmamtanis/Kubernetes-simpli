@@ -1,0 +1,18 @@
+Types of Cotrollers (controllers is an abstract layer that can create & manage  a group of pods)
+
+replicaSet - allow no. of pods
+
+daeomonset - one per node, monitoring AV etc
+
+deployment - managing multiple replicaset, desired state - kind: Service
+
+Job -  job starts and then stops . take DB backup every 3 hrs. kind: Job. backup, retries handled.
+
+CronJob - https://crontab.guru/           kubectl get cj
+minute(0-59) Hours(0-23) DayoftheMonth(1-31) Month(1-12) DayofTheWeek(0-7) (0&7-Sunday)
+30           14          10                  6           6
+*/15         */4       */7                                                       (every 4 hrs)(every 15 mins)(every week)
+5,20,45      2,8,14    1,15,18               1,7,10      1,4,5                    Select min, hours
+20-30        1-14      2-20                  3-5         3-4                      Range
+*            *         *                     *           *                        every-minute.sh
+
