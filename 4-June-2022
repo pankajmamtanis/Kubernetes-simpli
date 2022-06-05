@@ -59,3 +59,33 @@ types of volumes
   
   Secret - same as config map just that this keeps user/passwords. use base64 for encryption
   
+--------------------
+
+Networking
+1- bridge - docker to docker communication will always work
+2- none - its like wifi disconnected, IP not provided
+3- host - outside to in and reverse will work, not 2 containers with same port can be done. it will exit
+4 - docker swarm doing Overlay network which takes care of inter-VLAN comminication across VMs, just container has to be part of the overlay network
+5- 
+
+K8 netowkring
+1- weave network - overlay
+2- pause networking - same IP can be used with different ports 8080 for nginx 80 for tomcat etc. this is made possible with pause container.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
