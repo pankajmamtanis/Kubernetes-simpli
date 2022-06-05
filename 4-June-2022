@@ -72,7 +72,14 @@ K8 netowkring
 1- weave network - overlay
 2- pause networking - same IP can be used with different ports 8080 for nginx 80 for tomcat etc. this is made possible with pause container.
 
+Kube-DNS (LB IP)--> points to Core-DNS set of containers
 
+https://www.digitalocean.com/community/tutorials/an-introduction-to-the-kubernetes-dns-service
+1- servicename = IP address in DNS
+
+-----
+
+resource quota - cannot go beyond the defined quota.
 
 
 
