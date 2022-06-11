@@ -81,6 +81,36 @@ https://www.digitalocean.com/community/tutorials/an-introduction-to-the-kubernet
 
 resource quota - cannot go beyond the defined quota.
 
+------------
+
+we can manage view the cluster info from any kube worker node if we get the kube config file from sysadmin
+
+----
+SSH
+
+browser - bank communication - communication is done using private keys, browser will know that its a valid bank only with the CA
+
+CA - certificate authority
+- bank will generate private/public key pair with the help of any encryption tech
+
+- bank will use private /public key pair to Generate a CSR (certificate signing request)
+  -  inside the CSR / its like a request to cA (CSR = passport request form)
+  - public key
+  - netabnking.hdfc.com / 10.4.5.6
+  - addr of your comp ( PAssport given to an individual through Govt)
+  
+ - we will submit/send the CSR to the CA
+  
+ - ca will validate
+ 
+ - browser has a list of valid certificate autority listed, if website CA is part of the list then it will work
+ 
+ 
+ exercise
+ 
+ https://github.com/lerndevops/educka/blob/master/7-security/rbac/rbac-normalUser.md
+ 
+ 
 
 
 
